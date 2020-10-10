@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 
 theme_set(
-  ggthemes::theme_fivethirtyeight() + theme(legend.position = "bottom")
+  ggthemes::theme_clean() + theme(legend.position = "bottom")
   )
 
 options(
