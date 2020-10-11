@@ -229,7 +229,9 @@ ny_noaa_tidy =
   mutate(
     tmin = as.numeric(tmin),
     tmax = as.numeric(tmax),
-    month = as.integer(month))
+    month = as.integer(month),
+    day = as.numeric(day)
+    )
 ```
 
 Creating a month name tibble.
@@ -244,11 +246,79 @@ Left joining month name tibble and ny_noaa
 
 ```{r}
 ny_noaa_tidy = 
-  left_join(ny_noaa_tidy, month_df, by = "month") %>% 
-  relocate(year, month_name, day, id)
-ny_noaa_tidy
+  left_join(ny_noaa_tidy, month_df, by = "month")
 ```
 
+```{r}
+ny_noaa_tidy %>% 
+  group_by(month_name, month) %>% 
+  mutate(
+    month_name = factor(month_name)
+    ) %>% 
+  ungroup()
+```
+
+Most common values using the count and rank functions.  
+
+```{r}
+ny_noaa_snow = ny_noaa_tidy %>% 
+  filter(snow > 0) %>% 
+  count(snow) %>% 
+  arrange(desc(n)) %>% 
+  mutate(rank = min_rank(desc(n))) %>% 
+  filter(rank < 4) %>% 
+  knitr::kable()
+```
+
+The most common amount of snowfall recorded was 25mm, 13mm and 51mm.
+
+Making a January plot:
+
+```{r}
+ny_noaa_temp_Jan_plot = ny_noaa_tidy %>% 
+  group_by(id, month_name, year) %>% 
+  filter(month_name == "January") %>% 
+  summarize(
+    mean_max_temp = mean(tmax, na.rm = TRUE)) %>% 
+  drop_na() %>% 
+  ggplot(aes(x = year, y = mean_max_temp, group = id, color = id)) + 
+  geom_hex() + theme(legend.position = "none") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))  +
+  ggtitle("January Temperatures") +
+  xlab("Year") +
+  ylab("Mean Maximum Temperature (C)")
+```
+
+Making a July plot:
+```{r}
+ny_noaa_temp_July_plot = ny_noaa_tidy %>% 
+  group_by(id, month_name, year) %>% 
+  filter(month_name == "July") %>% 
+  summarize(
+    mean_max_temp = mean(tmax, na.rm = TRUE)) %>% 
+  drop_na() %>% 
+  ggplot(aes(x = year, y = mean_max_temp, group = id, color = id)) + 
+  geom_hex() + 
+  theme(legend.position = "none") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  ggtitle("July Temperatures") +
+  xlab("Year") +
+  ylab("Mean Maximum Temperature (C)")
+```
+
+Two plots
+```{r}
+ny_noaa_temp_Jan_plot + ny_noaa_temp_July_plot
+```
+
+### Discussion
+These two plots of January and July temperatures from all the reporting weather stations in New York across the years demonstrate a trend toward increasing temperatures in January with  wider variance as compared to July temperatures which appear to remain fairly similar over time.
+
+```{r}
+ny_noaa_tidy %>% 
+  ggplot(aes(x = tmin, y = tmax)) + geom_hex()
+  
+```
 
 
 Problem 2 Notes 
