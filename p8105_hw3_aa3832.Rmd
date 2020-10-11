@@ -118,18 +118,49 @@ accel_df = read_csv("./data/accel_data.csv") %>%
       day %in% c("Saturday","Sunday") ~ "weekend")) %>% 
   group_by(day, day_id) %>% 
   mutate(
-    day = factor(day))
+    day = factor(day)) %>% 
+  ungroup()
 ```
 
-Summarizing data here, by the day of the week.
+Summarizing data here, by the day of the week and performing a few group_by calculations to learn more about patterns in the dataset.
 
+This is weekday vs. weekend
 ```{r}
-accel_summary = accel_df %>% 
+accel_summary1 = 
+  accel_df %>% 
+  group_by(weekdays) %>% 
     summarize(
       mean_daily_activity = mean(activity_count, na.rm = TRUE)) %>% 
     knitr::kable()
+accel_summary1
 ```
 
+This is by day of the week.
+```{r}
+accel_summary2 = 
+  accel_df %>% 
+  group_by(day) %>% 
+    summarize(
+      mean_daily_activity = mean(activity_count, na.rm = TRUE)) %>% 
+    knitr::kable()
+accel_summary2
+```
+
+This is week to week.
+
+```{r}
+accel_summary3 = 
+  accel_df %>% 
+  group_by(week) %>% 
+    summarize(
+      mean_daily_activity = mean(activity_count, na.rm = TRUE)) %>% 
+    knitr::kable()
+accel_summary3
+```
+
+### Discussion
+
+The above summarized data show mean activity counts calculated by day of the week and also grouped by weekday versus weekend. Provided these data, we can appreciate that this individual is more active and weekdays, less active and weekends.  More specifically, he is most active on Fridays and least active on Saturdays.  
 
 1.  Pivot longer, day, activity count in every minute of the day, and check minute of the day in numeric
 2.  Add a variable for weekday and then weekend with mutate, and use factors so the day of the week is sensible.  
