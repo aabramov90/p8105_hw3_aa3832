@@ -185,10 +185,25 @@ accel_plot1 =
 ```{r}
 accel_plot2 = 
   accel_df %>% 
+  ggplot(aes(x = minute, y = activity_count)) +
+  geom_line() +
+  ggtitle("Daily Activity Count") +
+  xlab("Minute of the Day (min)") +
+  ylab("Activity Count")
+accel_plot2
+```
+
+Example to also consider, daily activity counts by day.  Here is the Friday activity count.  
+```{r}
+accel_plot3 = 
+  accel_df %>% 
   filter(day == "Friday") %>% 
   ggplot(aes(x = minute, y = activity_count)) +
-  geom_point()
-accel_plot2
+  geom_line() +
+  ggtitle("Friday Activity Count") + 
+  xlab("Minute of the Day (min)") +
+  ylab("Activity Count")
+accel_plot3
 ```
 
 
