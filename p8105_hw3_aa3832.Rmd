@@ -221,10 +221,35 @@ data("ny_noaa")
 ```
 
 Beginning with data wrangling.
+
 ```{r}
-ny_noaa %>% 
-  separate(date, into = c("year", "month", "day"), sep = "-")
+ny_noaa_tidy = 
+  ny_noaa %>% 
+  separate(date, into = c("year", "month", "day"), sep = "-") %>% 
+  mutate(
+    tmin = as.numeric(tmin),
+    tmax = as.numeric(tmax),
+    month = as.integer(month))
 ```
+
+Creating a month name tibble.
+```{r}
+month_df = 
+  tibble(
+    month = 1:12,
+    month_name = month.name)
+```
+
+Left joining month name tibble and ny_noaa
+
+```{r}
+ny_noaa_tidy = 
+  left_join(ny_noaa_tidy, month_df, by = "month") %>% 
+  relocate(year, month_name, day, id)
+ny_noaa_tidy
+```
+
+
 
 Problem 2 Notes 
 1.  Pivot longer, day, activity count in every minute of the day, and check minute of the day in numeric
