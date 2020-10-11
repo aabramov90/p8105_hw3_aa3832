@@ -100,10 +100,12 @@ instacart %>%
     knitr::kable()
 ```
 
-## Problem 2
+# Problem 2
 
 Read in data and data wrangling.  
 Here we are pivoting to longer to create minute and activity columns, creating a weekday column that identifies weekday vs. weekend and then creating the day of the week into a factor variable with 7 levels.  
+
+## Problem 2 Data Wrangling and EDA
 
 ```{r}
 accel_df = read_csv("./data/accel_data.csv") %>%
@@ -122,7 +124,7 @@ accel_df = read_csv("./data/accel_data.csv") %>%
   ungroup()
 ```
 
-Summarizing data here, by the day of the week and performing a few group_by calculations to learn more about patterns in the dataset.
+Summarizing data here and performing some calculations by the day of the week and performing a few group_by calculations to learn more about patterns in the dataset.
 
 This is weekday vs. weekend
 ```{r}
@@ -160,9 +162,11 @@ accel_summary3
 
 ### Discussion
 
+The activity count data has `r nrow(accel_df)` rows and `r ncol(accel_df)` columns.  The rows reflect activity count observed at every minute of the day.  Columns serve to group these data by week and day of the week. There is an additional column that groups the day of the week by weekday and weekend. 
+
 The above summarized data show mean activity counts calculated by day of the week, weekday vs. weekend and also week to week. Provided these data, we can appreciate that this individual is more active and weekdays, less active and weekends.  More specifically, he is most active on Fridays and least active on Saturdays. Lastly, he was most active in the 2nd and 3rd week. 
 
-Making a plot.
+## Problem 2 Plots
 
 Recreating the summary table.
 ```{r}
@@ -206,16 +210,27 @@ accel_plot3 =
 accel_plot3
 ```
 
+# Problem 3
 
+## Problem 3 Data Wrangling and EDA
+
+```{r}
+library(p8105.datasets)
+data("ny_noaa")
+
+nyweather_df = ny_noaa %>% 
+    separate(date, into = c("month", "day", "year"), sep = "-")
+nyweather_df
+```
+
+Problem 2 Notes 
 1.  Pivot longer, day, activity count in every minute of the day, and check minute of the day in numeric
 2.  Add a variable for weekday and then weekend with mutate, and use factors so the day of the week is sensible.  
 3.  Variable class
 4.  Group_by week and then day, and summarize problem
 5.  ggplot with geom_line
 
-
-## Problem 3
-
+Problem 3 Notes
 1.  Separate
 2.  Count for most commonly observed, rank?
 3.  Group_by and summarize, then filter
@@ -224,8 +239,4 @@ accel_plot3
 6. Two distinct plots with patchwork
 7.  tmax and tmin is a scatterplot, but probably better with contour or hexplot
 8.  filtering with ridgeplots
-
-```{r}
-
-```
 
