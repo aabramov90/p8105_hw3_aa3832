@@ -102,10 +102,32 @@ instacart %>%
 
 ## Problem 2
 
-Read in data
+Read in data and data wrangling.  
+Here we are pivoting to longer to create minute and activity columns, creating a weekday column that identifies weekday vs. weekend and then creating the day of the week into a factor variable with 7 levels.  
 
 ```{r}
+accel_df = read_csv("./data/accel_data.csv") %>%
+  pivot_longer(activity.1:activity.1440, 
+      names_to = "minute", 
+      values_to = "activity_count",
+      names_prefix = "activity.") %>% 
+  mutate(
+    weekdays = case_when(
+      day %in% c("Monday","Tuesday","Wednesday","Thursday","Friday") ~  
+        "weekday",
+      day %in% c("Saturday","Sunday") ~ "weekend")) %>% 
+  group_by(day, day_id) %>% 
+  mutate(
+    day = factor(day))
+```
 
+Summarizing data here, by the day of the week.
+
+```{r}
+accel_summary = accel_df %>% 
+    summarize(
+      mean_daily_activity = mean(activity_count, na.rm = TRUE)) %>% 
+    knitr::kable()
 ```
 
 
