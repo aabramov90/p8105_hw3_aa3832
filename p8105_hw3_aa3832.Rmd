@@ -353,20 +353,3 @@ Two plots
 tmax_tmin_plot / ny_noaa_snowfall_plot
 ```
 
-Problem 2 Notes 
-1.  Pivot longer, day, activity count in every minute of the day, and check minute of the day in numeric
-2.  Add a variable for weekday and then weekend with mutate, and use factors so the day of the week is sensible.  
-3.  Variable class
-4.  Group_by week and then day, and summarize problem
-5.  ggplot with geom_line
-
-Problem 3 Notes
-1.  Separate
-2.  Count for most commonly observed, rank?
-3.  Group_by and summarize, then filter
-4.  Then ggplot
-5.  Two panel with faceting
-6. Two distinct plots with patchwork
-7.  tmax and tmin is a scatterplot, but probably better with contour or hexplot
-8.  filtering with ridgeplots
-
