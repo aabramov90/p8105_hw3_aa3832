@@ -214,13 +214,17 @@ accel_plot3
 
 ## Problem 3 Data Wrangling and EDA
 
+Read in the dataset.
 ```{r}
 library(p8105.datasets)
 data("ny_noaa")
+```
 
-nyweather_df = ny_noaa %>% 
-    separate(date, into = c("month", "day", "year"), sep = "-")
-nyweather_df
+Beginning data wrangling.
+```{r}
+weather_df = ny_noaa %>% 
+    separate(date, into = c("year", "month", "day"), sep = "-")
+weather_df
 ```
 
 Problem 2 Notes 
